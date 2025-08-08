@@ -8,6 +8,7 @@ import ContractStats from '@/components/ContractStats'
 import RecentTipsFeed from '@/components/RecentTipsFeed'
 import UserStats from '@/components/UserStats'
 import UpdateHandleForm from '@/components/UpdateHandleForm'
+import UserTipHistory from '@/components/UserTipHistory'
 
 export default function Home() {
   const { address } = useAccount()
@@ -21,6 +22,7 @@ export default function Home() {
             <SendTipForm />
             <UpdateHandleForm />
             <UserStats />
+            <UserTipHistory />
             <ContractStats />
             <RecentTipsFeed />
           </div>
