@@ -126,11 +126,10 @@ export default function RecentTipsFeed() {
             <div key={tip.id} className="border rounded-lg p-3 bg-card text-sm space-y-1">
                 <div className='flex justify-between items-center'>
                     <p><strong>From:</strong> {shorten(tip.from)}</p>
-                    <p><strong>To:</strong> {shorten(tip.to)}</p>
+                    <p><strong>To:</strong> {tip.handle ? `@${tip.handle}` : shorten(tip.to)}</p>
                 </div>
                 <p><strong>Amount:</strong> {tip.amount} ETH</p>
-                <p><strong>Message:</strong> "{tip.message}"</p>
-                <p><strong>Handle:</strong> @{tip.handle}</p>
+                {tip.message && <p><strong>Message:</strong> "{tip.message}"</p>}
                 <p className="text-muted-foreground text-xs pt-1">{new Date(tip.timestamp * 1000).toLocaleString()}</p>
             </div>
         ))}

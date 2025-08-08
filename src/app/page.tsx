@@ -6,6 +6,7 @@ import SendTipForm from '@/components/SendTipForm'
 import { Header } from '@/components/header'
 import ContractStats from '@/components/ContractStats'
 import RecentTipsFeed from '@/components/RecentTipsFeed'
+import UserStats from '@/components/UserStats'
 
 export default function Home() {
   const { address } = useAccount()
@@ -15,9 +16,12 @@ export default function Home() {
       <Header />
       <main className="flex-grow flex flex-col items-center justify-center p-4 gap-6">
         {address ? (
-          <>
+          <div className="w-full max-w-md space-y-6">
             <SendTipForm />
-          </>
+            <UserStats />
+            <ContractStats />
+            <RecentTipsFeed />
+          </div>
         ) : (
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-4">Welcome to Farcaster Faucet</h1>
@@ -25,10 +29,6 @@ export default function Home() {
             <ConnectButton />
           </div>
         )}
-        <div className="w-full max-w-md space-y-6">
-            <ContractStats />
-            <RecentTipsFeed />
-        </div>
       </main>
     </div>
   )
