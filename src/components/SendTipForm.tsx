@@ -70,7 +70,7 @@ export default function SendTipForm() {
   const isProcessing = isWriting || isPending;
 
   return (
-    <Card className="w-full max-w-md shadow-lg">
+    <Card className="w-full max-w-xl shadow-lg">
       <CardHeader>
         <CardTitle>💸 Send a Tip</CardTitle>
         <CardDescription>Fill out the form below to send a tip to another Farcaster user.</CardDescription>
@@ -108,7 +108,7 @@ export default function SendTipForm() {
               type="text"
               placeholder="@username"
               value={handle}
-              onChange={(e) => setHandle(e.target.value)}
+              onChange={(e) => setHandle(e.target.value.replace(/^@/, ''))}
               required
               disabled={isProcessing}
             />

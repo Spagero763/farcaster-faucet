@@ -1,5 +1,30 @@
-# Firebase Studio
+# 🟣 Farcaster Tip dApp
 
-This is a NextJS starter in Firebase Studio.
+Send ETH tips to Farcaster users via their handles (e.g., @dwr.eth).
 
-To get started, take a look at src/app/page.tsx.
+## Features
+
+- 🔗 Connect Wallet (RainbowKit + Wagmi)
+- 🧾 Register your Farcaster handle
+- 💸 Send ETH tips with message + handle
+- 📊 See your stats and tip history
+- ⚡ Built on Base Sepolia
+
+## Stack
+
+- Next.js + Tailwind
+- RainbowKit + Wagmi + Viem
+- Smart Contract: Solidity on Base Sepolia
+
+## Live App
+
+👉 [https://farcaster-tip.vercel.app](https://farcaster-tip.vercel.app)
+
+## Smart Contract
+
+- `TipContract.sol`  
+- Deployed to Base Sepolia at `0x...`
+
+## License
+
+MIT

@@ -3,40 +3,28 @@
 import { useTipContract } from '@/hooks/useTipContract'
 import { useContractRead } from 'wagmi'
 import { formatEther } from 'viem'
-import { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import { Skeleton } from './ui/skeleton'
 
 export default function ContractStats() {
   const contract = useTipContract()
-  const [stats, setStats] = useState<{
-    totalTips: string
-    contractBalance: string
-    feesCollected: string
-  } | null>(null)
-
+  
   const { data, isLoading, isError } = useContractRead({
-    address: contract?.address,
-    abi: contract?.abi,
+    address: contract.address,
+    abi: contract.abi,
     functionName: 'getContractStats',
     watch: true,
-    enabled: !!contract,
   })
 
-  useEffect(() => {
-    if (data) {
-      const [totalTips, contractBalance, feesCollected] = data as [bigint, bigint, bigint]
-      setStats({
-        totalTips: totalTips.toString(),
-        contractBalance: formatEther(contractBalance),
-        feesCollected: formatEther(feesCollected),
-      })
-    }
-  }, [data])
+  const stats = data ? {
+    totalTips: (data as [bigint, bigint, bigint])[0].toString(),
+    contractBalance: formatEther((data as [bigint, bigint, bigint])[1]),
+    feesCollected: formatEther((data as [bigint, bigint, bigint])[2]),
+  } : null
 
   if (isLoading) {
     return (
-        <Card className="w-full max-w-md shadow-lg">
+        <Card className="w-full max-w-xl shadow-lg">
             <CardHeader>
                 <CardTitle>📊 Contract Stats</CardTitle>
             </CardHeader>
@@ -51,7 +39,7 @@ export default function ContractStats() {
 
   if (isError || !stats) {
     return (
-        <Card className="w-full max-w-md shadow-lg">
+        <Card className="w-full max-w-xl shadow-lg">
             <CardHeader>
                 <CardTitle>📊 Contract Stats</CardTitle>
             </CardHeader>
@@ -63,7 +51,7 @@ export default function ContractStats() {
   }
 
   return (
-    <Card className="w-full max-w-md shadow-lg">
+    <Card className="w-full max-w-xl shadow-lg">
         <CardHeader>
             <CardTitle>📊 Contract Stats</CardTitle>
         </CardHeader>

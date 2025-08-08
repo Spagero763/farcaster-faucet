@@ -16,14 +16,16 @@ export default function UserStats() {
     functionName: 'getUserStats',
     args: [address],
     watch: true,
-    enabled: !!address && !!contract,
+    enabled: !!address,
   })
 
-  if (!address) return null
-
+  if (!address) {
+     return null;
+  }
+  
   if (isLoading) {
     return (
-        <Card className="w-full max-w-md shadow-lg">
+        <Card className="w-full max-w-xl shadow-lg bg-primary/10">
             <CardHeader>
                 <CardTitle>👤 Your Stats</CardTitle>
             </CardHeader>
@@ -39,7 +41,7 @@ export default function UserStats() {
 
   if (isError || !data) {
     return (
-        <Card className="w-full max-w-md shadow-lg">
+        <Card className="w-full max-w-xl shadow-lg bg-primary/10">
             <CardHeader>
                 <CardTitle>👤 Your Stats</CardTitle>
             </CardHeader>
@@ -58,12 +60,12 @@ export default function UserStats() {
   ]
 
   return (
-    <Card className="w-full max-w-md shadow-lg bg-primary/10">
+    <Card className="w-full max-w-xl shadow-lg bg-primary/10">
       <CardHeader>
         <CardTitle>👤 Your Stats</CardTitle>
       </CardHeader>
-      <CardContent className="text-sm space-y-2">
-        <p><strong>Farcaster Handle:</strong> @{handle || 'Not set'}</p>
+      <CardContent className="text-sm space-y-2 break-all">
+        <p className="truncate"><strong>Farcaster Handle:</strong> {handle ? `@${handle}` : 'Not set'}</p>
         <p><strong>Total Tipped:</strong> {formatEther(totalTipped)} ETH</p>
         <p><strong>Total Received:</strong> {formatEther(totalReceived)} ETH</p>
         <p><strong>Your Tip Count:</strong> {tipCount.toString()}</p>

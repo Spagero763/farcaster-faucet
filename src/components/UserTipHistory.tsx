@@ -21,7 +21,7 @@ export default function UserTipHistory() {
     address: contract.address,
     abi: contract.abi,
     functionName: 'getUserTips',
-    args: [address!, BigInt(0), 10], // offset, limit
+    args: [address!, BigInt(0), BigInt(10)], // offset, limit
     watch: true,
     enabled: !!address,
   })
@@ -38,11 +38,9 @@ export default function UserTipHistory() {
   
   const isLoading = isLoadingIds || isLoadingDetails;
 
-  if (!address) return null
-
   if (isLoading && !tipDetails) {
     return (
-        <Card className="w-full max-w-md shadow-lg">
+        <Card className="w-full max-w-xl shadow-lg">
             <CardHeader>
                 <CardTitle>🧾 Your Tip History</CardTitle>
             </CardHeader>
@@ -59,7 +57,7 @@ export default function UserTipHistory() {
 
   if (isError) {
     return (
-        <Card className="w-full max-w-md shadow-lg">
+        <Card className="w-full max-w-xl shadow-lg">
             <CardHeader>
                 <CardTitle>🧾 Your Tip History</CardTitle>
             </CardHeader>
@@ -74,7 +72,7 @@ export default function UserTipHistory() {
 
   if (validTips.length === 0) {
      return (
-        <Card className="w-full max-w-md shadow-lg">
+        <Card className="w-full max-w-xl shadow-lg">
             <CardHeader>
                 <CardTitle>🧾 Your Tip History</CardTitle>
             </CardHeader>
@@ -86,30 +84,30 @@ export default function UserTipHistory() {
   }
 
   return (
-    <Card className="w-full max-w-md shadow-lg">
+    <Card className="w-full max-w-xl shadow-lg">
         <CardHeader>
             <CardTitle>🧾 Your Tip History</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-        {validTips.map((tip, i) => {
+        {validTips.slice().reverse().map((tip, i) => {
           if (!tip.result) return null
           const [sender, recipient, amount, message, handle, timestamp] = tip.result as TipDetails;
 
           const isSender = sender.toLowerCase() === address?.toLowerCase();
 
           return (
-            <div key={i} className="border rounded-lg p-3 bg-card text-sm space-y-1">
+            <div key={i} className="border rounded-lg p-3 bg-card text-sm space-y-1 break-all">
                  <div className='flex justify-between items-center'>
-                    <p>
+                    <p className="truncate">
                         <strong>{isSender ? 'To:' : 'From:'}</strong> 
-                        {handle ? ` @${handle}` : ` ${shorten(isSender ? recipient : sender)}`}
+                        {handle ? `@${handle}` : ` ${shorten(isSender ? recipient : sender)}`}
                     </p>
                     <p className={`font-bold ${isSender ? 'text-destructive' : 'text-green-500'}`}>
                       {isSender ? '-' : '+'}
                       {formatEther(amount)} ETH
                     </p>
                  </div>
-                {message && <p><strong>Message:</strong> "{message}"</p>}
+                {message && <p className="truncate"><strong>Message:</strong> "{message}"</p>}
               <p className="text-muted-foreground text-xs pt-1">{new Date(Number(timestamp) * 1000).toLocaleString()}</p>
             </div>
           )

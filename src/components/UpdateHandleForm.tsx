@@ -59,7 +59,7 @@ export default function UpdateHandleForm() {
   const isProcessing = isWriting || isPending;
 
   return (
-    <Card className="w-full max-w-md shadow-lg">
+    <Card className="w-full max-w-xl shadow-lg">
         <CardHeader>
             <CardTitle>🔗 Update Farcaster Handle</CardTitle>
             <CardDescription>Link your address to your Farcaster handle.</CardDescription>
@@ -85,8 +85,7 @@ export default function UpdateHandleForm() {
                     className="w-full"
                     disabled={isProcessing || handle.length < 3}
                 >
-                    {isProcessing ? <><Loader2 className="animate-spin" /> : null}
-                    {isProcessing ? 'Updating...' : 'Update Handle'}
+                    {isProcessing ? <><Loader2 className="animate-spin" />Updating...</> : 'Update Handle'}
                 </Button>
             </CardFooter>
         </form>
