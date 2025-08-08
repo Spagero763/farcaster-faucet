@@ -7,6 +7,7 @@ import { Header } from '@/components/header'
 import ContractStats from '@/components/ContractStats'
 import RecentTipsFeed from '@/components/RecentTipsFeed'
 import UserStats from '@/components/UserStats'
+import UpdateHandleForm from '@/components/UpdateHandleForm'
 
 export default function Home() {
   const { address } = useAccount()
@@ -18,6 +19,7 @@ export default function Home() {
         {address ? (
           <div className="w-full max-w-md space-y-6">
             <SendTipForm />
+            <UpdateHandleForm />
             <UserStats />
             <ContractStats />
             <RecentTipsFeed />

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { parseEther } from 'viem'
 import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
 import { useTipContract } from '@/hooks/useTipContract'
@@ -21,48 +21,59 @@ export default function SendTipForm() {
   const { toast } = useToast()
   
   const contract = useTipContract()
-  const { data: hash, writeContract, isPending: isWriting, error } = useWriteContract()
+  const { data: hash, writeContract, isPending: isWriting, error, reset } = useWriteContract()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    if (!to || !amount || !message || !handle) return;
     writeContract({
         address: contract.address,
         abi: contract.abi,
         functionName: 'sendTip',
         args: [to, message, handle, isPublic],
-        value: amount ? parseEther(amount) : undefined,
+        value: parseEther(amount),
     })
   }
 
   const { isLoading: isPending, isSuccess } = useWaitForTransactionReceipt({ hash })
 
-  if (isSuccess) {
-    toast({
-        title: "Tip Sent!",
-        description: "Your transaction has been sent successfully.",
-        action: (
-          <a href={`https://sepolia.basescan.org/tx/${hash}`} target="_blank" rel="noopener noreferrer" className="underline">
-            View on BaseScan
-          </a>
-        ),
-    })
-  }
+  useEffect(() => {
+    if (isSuccess) {
+      toast({
+          title: "Tip Sent!",
+          description: "Your transaction has been sent successfully.",
+          action: (
+            <a href={`https://sepolia.basescan.org/tx/${hash}`} target="_blank" rel="noopener noreferrer" className="underline">
+              View on BaseScan
+            </a>
+          ),
+      })
+      setTo('')
+      setMessage('')
+      setHandle('')
+      setAmount('')
+      reset()
+    }
+  }, [isSuccess, hash, toast, reset])
   
-  if (error) {
-    toast({
-        variant: "destructive",
-        title: "Transaction Failed",
-        description: error.message.split('\n')[0],
-    })
-  }
+  useEffect(() => {
+    if (error) {
+      toast({
+          variant: "destructive",
+          title: "Transaction Failed",
+          description: error.message.split('\n')[0],
+      })
+      reset()
+    }
+  }, [error, toast, reset])
 
   const isProcessing = isWriting || isPending;
 
   return (
     <Card className="w-full max-w-md shadow-lg">
       <CardHeader>
-        <CardTitle>Send a Tip</CardTitle>
-        <CardDescription>Fill out the form below to send a tip.</CardDescription>
+        <CardTitle>💸 Send a Tip</CardTitle>
+        <CardDescription>Fill out the form below to send a tip to another Farcaster user.</CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit}>
         <CardContent className="space-y-4">
@@ -91,7 +102,7 @@ export default function SendTipForm() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="handle">Farcaster Handle</Label>
+            <Label htmlFor="handle">Recipient Farcaster Handle</Label>
             <Input
               id="handle"
               type="text"
@@ -115,21 +126,21 @@ export default function SendTipForm() {
               step="any"
             />
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 pt-2">
             <Checkbox 
                 id="isPublic"
                 checked={isPublic} 
-                onCheckedChange={() => setIsPublic(!isPublic)}
+                onCheckedChange={(checked) => setIsPublic(!!checked)}
                 disabled={isProcessing}
             />
-            <Label htmlFor="isPublic">Make tip public</Label>
+            <Label htmlFor="isPublic" className="font-normal">Make this tip public on the feed</Label>
           </div>
         </CardContent>
         <CardFooter>
           <Button
             type="submit"
             className="w-full"
-            disabled={isProcessing}
+            disabled={isProcessing || !to || !amount || !message || !handle}
           >
             {isProcessing ? <><Loader2 className="animate-spin" /> Sending...</> : 'Send Tip'}
           </Button>
